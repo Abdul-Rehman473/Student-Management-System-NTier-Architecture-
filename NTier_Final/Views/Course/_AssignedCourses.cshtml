@@ -36,9 +36,13 @@
                         </div>
                     </td>
                     <td class="text-center">
-                        <button onclick="deleteAssignment(@course.Id)" class="btn btn-danger btn-sm" title="Remove Assignment">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                        <form asp-action="DeleteAssignedCourse" asp-controller="Course" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@course.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" title="Remove Assignment" 
+                                    onclick="return confirm('Are you sure you want to remove this course assignment?');">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }
@@ -64,7 +68,19 @@
                 data: { id: id },
                 success: function (result) {
                     $('#assignedTable').html(result);
-                    initializeDataTable(); // Reinitialize DataTable after update
+                    // Re-initialize the DataTable
+                    if ($.fn.DataTable.isDataTable('#assignedCoursesTable')) {
+                        $('#assignedCoursesTable').DataTable().destroy();
+                    }
+                    $('#assignedCoursesTable').DataTable({
+                        "paging": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                        "responsive": true
+                    });
                 },
                 error: function (xhr, status, error) {
                     alert('Error removing assignment: ' + error);
@@ -73,26 +89,18 @@
         }
     }
 
-    function initializeDataTable() {
-        // Destroy existing DataTable if it exists
-        if ($.fn.DataTable.isDataTable('#assignedCoursesTable')) {
-            $('#assignedCoursesTable').DataTable().destroy();
-        }
-        
-        // Initialize new DataTable
-        $('#assignedCoursesTable').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true
-        });
-    }
-
     // Initialize DataTable when document is ready
     $(document).ready(function() {
-        initializeDataTable();
+        if (!$.fn.DataTable.isDataTable('#assignedCoursesTable')) {
+            $('#assignedCoursesTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true
+            });
+        }
     });
 </script>

@@ -5,7 +5,7 @@
         <h3 class="card-title">All Courses</h3>
     </div>
     <div class="card-body p-0">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" id="coursesTable">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -26,9 +26,10 @@
                                 <a asp-action="CourseForm" class="btn btn-warning btn-sm" asp-route-id="@course.Id">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <button type="button" class="btn btn-danger btn-sm delete-course" data-id="@course.Id">
+                                <a asp-action="Delete" asp-route-id="@course.Id" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this course?');">
                                     <i class="bi bi-trash"></i>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -38,16 +39,44 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            $('.table').DataTable({
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "responsive": true,
-            });
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable
+        var table = $('#coursesTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "emptyTable": "No courses available"
+            }
         });
-    </script>
-}
+
+        // Initialize delete buttons
+        $('.delete-course').on('click', function(e) {
+            e.preventDefault();
+            var courseId = $(this).data('id');
+            
+            if (confirm('Are you sure you want to delete this course?')) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "Course")',
+                    type: 'POST',
+                    data: { id: courseId },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success('Course deleted successfully!');
+                            // Reload the table
+                            window.location.reload();
+                        } else {
+                            toastr.error('Error deleting course. Please try again.');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Error deleting course. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+</script>

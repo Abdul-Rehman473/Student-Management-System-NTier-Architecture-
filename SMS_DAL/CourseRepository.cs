@@ -31,8 +31,14 @@ namespace SMS_DAL
 
         public void Update(courseBO course)
         {
-            _context.Courses.Update(course);
-            _context.SaveChanges(); // Explicit save
+            // Ensure the entity is being tracked
+            var existingCourse = _context.Courses.Find(course.Id);
+            if (existingCourse != null)
+            {
+                // Update properties
+                _context.Entry(existingCourse).CurrentValues.SetValues(course);
+                _context.SaveChanges(); // Explicit save
+            }
         }
 
         public void Delete(int id)
@@ -57,24 +63,16 @@ namespace SMS_DAL
 
         public courseBO? GetUnassignedCourseByTitle(string title)
         {
-            var course = _context.Courses.Include(c => c.Student).FirstOrDefault(c => c.Title == title && c.StudentId == null);
-            if (course != null)
-            {
-                // Detach the entity to avoid tracking conflicts
-                _context.Entry(course).State = EntityState.Detached;
-            }
-            return course;
+            return _context.Courses
+                .Include(c => c.Student)
+                .FirstOrDefault(c => c.Title == title && c.StudentId == null);
         }
 
         public courseBO? GetCourseByTitle(string title)
         {
-            var course = _context.Courses.Include(c => c.Student).FirstOrDefault(c => c.Title == title);
-            if (course != null)
-            {
-                // Detach the entity to avoid tracking conflicts
-                _context.Entry(course).State = EntityState.Detached;
-            }
-            return course;
+            return _context.Courses
+                .Include(c => c.Student)
+                .FirstOrDefault(c => c.Title == title);
         }
 
         public bool IsCourseAssigned(int studentId, string courseTitle)

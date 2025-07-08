@@ -62,17 +62,19 @@ namespace NTier_Final.Controllers
             return PartialView(courses);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             try
             {
                 _courseService.Delete(id);
-                return Json(new { success = true });
+                TempData["Success"] = "Course deleted successfully!";
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
-                return Json(new { success = false });
+                TempData["Error"] = "Error deleting course. Please try again.";
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -155,18 +157,29 @@ namespace NTier_Final.Controllers
         {
             try 
             {
+                // Get a fresh instance of the course
                 var course = _courseService.GetById(id);
                 if (course != null)
                 {
-                    course.StudentId = null;
-                    _courseService.Update(course);
+                    // Create a new instance to avoid tracking issues
+                    var courseToUpdate = new courseBO
+                    {
+                        Id = course.Id,
+                        Title = course.Title,
+                        Instructor = course.Instructor,
+                        CreditHours = course.CreditHours,
+                        StudentId = null // Remove the assignment
+                    };
+                    
+                    _courseService.Update(courseToUpdate);
+                    TempData["Success"] = "Course assignment removed successfully!";
                 }
-                var assignedCourses = _courseService.GetAssignedCourses().ToList();
-                return PartialView("_AssignedCourses", assignedCourses);
+                return RedirectToAction(nameof(AssignCourse));
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                TempData["Error"] = "Error removing course assignment: " + ex.Message;
+                return RedirectToAction(nameof(AssignCourse));
             }
         }
     }
