@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Role Selection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="login-page bg-light">
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="/" class="h1">
+                    <img src="~/assets/img/AdminLTELogo.png" alt="SMS Logo" class="brand-image img-circle elevation-3" style="opacity: .8; width: 50px;">
+                    <b>SMS</b>
+                </a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Select your role to continue</p>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <a href="@Url.Action("StudentAuth", "Account")" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-graduate mr-2"></i> Login as Student
+                        </a>
+                    </div>
+                    <div class="col-12">
+                        <a href="@Url.Action("AdminAuth", "Account")" class="btn btn-danger btn-block">
+                            <i class="fas fa-user-shield mr-2"></i> Login as Admin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .login-page {
+            height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9ecef;
+        }
+        .login-box {
+            width: 400px;
+        }
+        .btn-block {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+        }
+        .card-primary.card-outline {
+            border-top: 3px solid #007bff;
+        }
+    </style>
+} 

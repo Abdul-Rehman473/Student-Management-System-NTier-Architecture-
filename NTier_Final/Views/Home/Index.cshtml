@@ -1,0 +1,139 @@
+﻿@model dynamic  // Using dynamic model for ViewBag data flexibility
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Content Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info"><i class="bi bi-people-fill"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Students</span>
+                        <span class="info-box-number">@ViewBag.TotalStudents</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success"><i class="bi bi-book-fill"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Courses</span>
+                        <span class="info-box-number">@ViewBag.TotalCourses</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more info boxes if needed -->
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <a asp-controller="Student" asp-action="Create" class="btn btn-primary w-100">
+                                    <i class="bi bi-person-plus-fill me-2"></i> Add New Student
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a asp-controller="Course" asp-action="CourseForm" class="btn btn-success w-100">
+                                    <i class="bi bi-plus-circle-fill me-2"></i> Add New Course
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a asp-controller="Student" asp-action="Index" class="btn btn-info w-100">
+                                    <i class="bi bi-list-ul me-2"></i> View Students
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a asp-controller="Course" asp-action="AssignCourse" class="btn btn-warning w-100">
+                                    <i class="bi bi-link-45deg me-2"></i> Assign Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activities</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.RecentActivities != null)
+                                    {
+                                        @foreach (var activity in ViewBag.RecentActivities)
+                                        {
+                                            <tr>
+                                                <td>@activity.Description</td>
+                                                <td>@activity.Date.ToString("MMM dd, yyyy")</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="2" class="text-center">No recent activities</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "responsive": true,
+            });
+        });
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!--begin::Sidebar-->
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <!--begin::Sidebar Brand-->
+    <div class="sidebar-brand">
+        <a href="/" class="brand-link">
+            <img src="/assets/img/AdminLTELogo.png" alt="SMS Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">Student Management</span>
+        </a>
+    </div>
+    <!--end::Sidebar Brand-->
+    <!--begin::Sidebar Wrapper-->
+    <div class="sidebar-wrapper">
+        <nav class="mt-2">
+            <!--begin::Sidebar Menu-->
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+                @if (User.IsInRole("Admin"))
+                {
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">
+                            <i class="nav-icon bi bi-speedometer"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+
+                    <!-- Student Management -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-people-fill"></i>
+                            <p>
+                                Students
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a asp-controller="Student" asp-action="Create" class="nav-link">
+                                    <i class="nav-icon bi bi-person-plus-fill"></i>
+                                    <p>Add Student</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Student" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon bi bi-list-ul"></i>
+                                    <p>View Students</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Course Management -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-book-fill"></i>
+                            <p>
+                                Courses
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a asp-controller="Course" asp-action="Create" class="nav-link">
+                                    <i class="nav-icon bi bi-plus-circle-fill"></i>
+                                    <p>Add Course</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Course" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon bi bi-list-ul"></i>
+                                    <p>View Courses</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Course" asp-action="AssignCourse" class="nav-link">
+                                    <i class="nav-icon bi bi-link-45deg"></i>
+                                    <p>Assign Course</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else if (User.IsInRole("Student"))
+                {
+                    <li class="nav-item">
+                        <a asp-controller="Student" asp-action="StudentDashboard" class="nav-link">
+                            <i class="nav-icon bi bi-speedometer"></i>
+                            <p>My Dashboard</p>
+                        </a>
+                    </li>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item mt-auto" style="margin-top: auto !important;">
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                            <button type="submit" class="nav-link text-danger w-100 border-0 bg-transparent">
+                                <i class="nav-icon bi bi-box-arrow-right"></i>
+                                <p>Logout</p>
+                            </button>
+                        </form>
+                    </li>
+                }
+            </ul>
+            <!--end::Sidebar Menu-->
+        </nav>
+    </div>
+    <!--end::Sidebar Wrapper-->
+</aside>
+<!--end::Sidebar-->

@@ -1,0 +1,91 @@
+﻿@model List<SMS_Objects.courseBO>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "All Courses";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Course Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Courses</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Courses</h3>
+                        <div class="card-tools">
+                            <a asp-action="CourseForm" asp-controller="Course" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-1"></i> Add New Course
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Instructor</th>
+                                    <th>Credit Hours</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var c in Model)
+                                {
+                                    <tr>
+                                        <td>@c.Title</td>
+                                        <td>@c.Instructor</td>
+                                        <td>@c.CreditHours</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <a asp-action="Details" class="btn btn-info btn-sm" asp-route-id="@c.Id">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a asp-action="CourseForm" class="btn btn-warning btn-sm" asp-route-id="@c.Id">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a asp-action="Delete" class="btn btn-danger btn-sm" asp-route-id="@c.Id"
+                                                   onclick="return confirm('Are you sure you want to delete this course?');">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "responsive": true,
+            });
+        });
+    </script>
+}

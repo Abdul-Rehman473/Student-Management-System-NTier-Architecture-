@@ -1,0 +1,106 @@
+@model SMS_Objects.studentBO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model?.Id >= 0 ?   "Add New Student" : "Update Student";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="ListStudents">Students</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Information</h3>
+                    </div>
+                    <form asp-action="Create" asp-controller="Student" method="post" class="needs-validation" novalidate>
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="Name" class="form-label"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Email" class="form-label"></label>
+                                        <input asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="PhoneNo" class="form-label"></label>
+                                        <input asp-for="PhoneNo" class="form-control" type="number" />
+                                        <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="Age" class="form-label"></label>
+                                        <input asp-for="Age" class="form-control" />
+                                        <span asp-validation-for="Age" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Semester" class="form-label"></label>
+                                        <input asp-for="Semester" class="form-control" />
+                                        <span asp-validation-for="Semester" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="CGPA" class="form-label"></label>
+                                        <input asp-for="CGPA" class="form-control" step="0.01" min="0" max="4" type="number" />
+                                        <span asp-validation-for="CGPA" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i> @(Model?.Id > 0 ? "Update" : "Save") Student
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary float-end">
+                                <i class="bi bi-list me-1"></i> View All Students
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}

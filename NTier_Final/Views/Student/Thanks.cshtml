@@ -1,0 +1,25 @@
+﻿@model SMS_Objects.studentBO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Thank You";
+}
+
+<div class="container mt-5">
+    <h3 class="mb-4 text-primary">You Entered the Following Information</h3>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <p><strong>Name:</strong> @Model.Name</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone Number:</strong> @Model.PhoneNo</p>
+            <p><strong>Age:</strong> @Model.Age</p>
+            <p><strong>Semester:</strong> @Model.Semester</p>
+            <p><strong>CGPA:</strong> @Model.CGPA</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="ListStudents" class="btn btn-primary">Click Here to View All Students</a>
+    </div>
+</div>

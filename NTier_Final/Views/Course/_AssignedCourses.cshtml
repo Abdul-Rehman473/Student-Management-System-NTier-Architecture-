@@ -1,0 +1,98 @@
+﻿@model List<SMS_Objects.courseBO>
+
+<h4 class="text-info ms-3" >Assigned Courses</h4>
+
+<table class="table table-striped table-hover" id="assignedCoursesTable">
+    <thead>
+        <tr>
+            <th style="width: 30%">Course</th>
+            <th style="width: 25%">Instructor</th>
+            <th style="width: 25%">Student</th>
+            <th style="width: 20%" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-book-fill me-2"></i>
+                            @course.Title
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-fill me-2"></i>
+                            @course.Instructor
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            @course.Student?.Name
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <button onclick="deleteAssignment(@course.Id)" class="btn btn-danger btn-sm" title="Remove Assignment">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center py-4 text-muted">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No courses have been assigned yet
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function deleteAssignment(id) {
+        if (confirm('Are you sure you want to remove this course assignment?')) {
+            $.ajax({
+                url: '/Course/DeleteAssignedCourse',
+                type: 'POST',
+                data: { id: id },
+                success: function (result) {
+                    $('#assignedTable').html(result);
+                    initializeDataTable(); // Reinitialize DataTable after update
+                },
+                error: function (xhr, status, error) {
+                    alert('Error removing assignment: ' + error);
+                }
+            });
+        }
+    }
+
+    function initializeDataTable() {
+        // Destroy existing DataTable if it exists
+        if ($.fn.DataTable.isDataTable('#assignedCoursesTable')) {
+            $('#assignedCoursesTable').DataTable().destroy();
+        }
+        
+        // Initialize new DataTable
+        $('#assignedCoursesTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true
+        });
+    }
+
+    // Initialize DataTable when document is ready
+    $(document).ready(function() {
+        initializeDataTable();
+    });
+</script>

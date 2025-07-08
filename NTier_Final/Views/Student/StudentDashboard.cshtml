@@ -1,0 +1,81 @@
+@model SMS_Objects.studentBO
+@{
+    ViewData["Title"] = "Student Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Student Information Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Student Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="~/assets/img/avatar.png" alt="Student Avatar" class="img-circle elevation-2" style="width: 100px; height: 100px;">
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>@Model.PhoneNo</td>
+                        </tr>
+                        <tr>
+                            <th>Age</th>
+                            <td>@Model.Age</td>
+                        </tr>
+                        <tr>
+                            <th>Semester</th>
+                            <td>@Model.Semester</td>
+                        </tr>
+                        <tr>
+                            <th>CGPA</th>
+                            <td>@Model.CGPA</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assigned Courses Card -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Assigned Courses</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Course Title</th>
+                                    <th>Instructor</th>
+                                    <th>Credit Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var course in Model.AssignedCourses)
+                                {
+                                    <tr>
+                                        <td>@course.Title</td>
+                                        <td>@course.Instructor</td>
+                                        <td>@course.CreditHours</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,174 @@
+﻿@model SMS_Objects.courseBO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model?.Id > 0 ? "Update Course" : "Add New Course";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Course Information</h3>
+                    </div>
+                    <form asp-action="CourseForm" asp-controller="Course" method="post" class="needs-validation" novalidate>
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label asp-for="Title" class="form-label"></label>
+                                        <input asp-for="Title" class="form-control" />
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label asp-for="Instructor" class="form-label"></label>
+                                        <input asp-for="Instructor" class="form-control" />
+                                        <span asp-validation-for="Instructor" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label asp-for="CreditHours" class="form-label"></label>
+                                        <input asp-for="CreditHours" class="form-control" />
+                                        <span asp-validation-for="CreditHours" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i> @(Model?.Id > 0 ? "Update" : "Save") Course
+                            </button>
+                            <a asp-action="Index" asp-controller="Course" class="btn btn-secondary float-end">
+                                <i class="bi bi-list me-1"></i> View All Courses
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Table Section -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div id="courseTableContainer">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+
+        // Load course table
+        function loadCourseTable() {
+            $.get('@Url.Action("_AllCourses", "Course")', function(data) {
+                $('#courseTableContainer').html(data);
+                initializeDeleteButtons();
+            });
+        }
+
+        // Initialize delete buttons
+        function initializeDeleteButtons() {
+            $('.delete-course').on('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to delete this course?')) {
+                    var courseId = $(this).data('id');
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Course")',
+                        type: 'POST',
+                        data: { id: courseId },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success('Course deleted successfully!');
+                                loadCourseTable();
+                            } else {
+                                toastr.error('Error deleting course. Please try again.');
+                            }
+                        },
+                        error: function() {
+                            toastr.error('Error deleting course. Please try again.');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Document ready
+        $(document).ready(function() {
+            loadCourseTable();
+        });
+
+        // Form submission
+        $('form').on('submit', function(e) {
+            if (this.checkValidity()) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            // Clear form fields
+                            $('#Id').val('0');
+                            $('#Title').val('');
+                            $('#Instructor').val('');
+                            $('#CreditHours').val('');
+                            form.removeClass('was-validated');
+                            
+                            // Refresh table and show success message
+                            loadCourseTable();
+                            toastr.success('Course saved successfully!');
+                        } else {
+                            toastr.error('Error saving course. Please try again.');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Error saving course. Please try again.');
+                    }
+                });
+            }
+        });
+    </script>
+}

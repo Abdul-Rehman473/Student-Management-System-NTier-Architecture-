@@ -1,0 +1,36 @@
+﻿# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+
+# NuGet packages
+*.nupkg
+packages/
+
+# VS Code settings
+.vscode/
+
+# Rider settings
+.idea/
+
+# Backup & logs
+*.log
+*.cache
+
+# Others
+*.db
+*.mdf
+*.ldf
+*.sqlite
+
+# Auto-generated files
+Generated_Code/
+*.Designer.cs
+*.g.cs
+*.g.i.cs

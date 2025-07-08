@@ -1,0 +1,134 @@
+﻿@model SMS_Objects.AssignCourseBO
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Assign Course";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Course Assignment</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item active">Assign Course</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Assign Course to Student</h3>
+                        <div class="card-tools">
+                            <a asp-controller="Student" asp-action="StudentForm" class="btn btn-light me-2">
+                                <i class="bi bi-person-plus"></i> New Student
+                            </a>
+                            <a asp-controller="Course" asp-action="CourseForm" class="btn btn-light">
+                                <i class="bi bi-book-fill"></i> New Course
+                            </a>
+                        </div>
+                    </div>
+                    <form id="assignForm" asp-action="AssignCourse" method="post">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="form-label">Select Student</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-person"></i>
+                                            </span>
+                                            <select asp-for="StudentId" asp-items="Model.Students" class="form-select">
+                                                <option value="">-- Select Student --</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="StudentId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="form-label">Select Course</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-book"></i>
+                                            </span>
+                                            <select asp-for="CourseTitle" asp-items="Model.Courses" class="form-select">
+                                                <option value="">-- Select Course --</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="CourseTitle" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle me-1"></i> Assign Course
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-list-check me-2"></i>
+                            Assigned Courses
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="assignedTable">
+                            @await Html.PartialAsync("_AssignedCourses", Model.AssignedCourses)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            $('#StudentId, #CourseTitle').select2({
+                theme: 'bootstrap-5',
+                width: '100%'
+            });
+
+            $('#assignForm').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '/Course/AssignCourse',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        $('#assignedTable').html(result);
+                        $('#assignForm')[0].reset();
+                        $('#StudentId, #CourseTitle').val('').trigger('change');
+                    },
+                    error: function () {
+                        alert('Something went wrong! Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+}

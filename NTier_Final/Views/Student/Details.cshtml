@@ -1,0 +1,129 @@
+@model SMS_Objects.studentBO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Student Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Student Details</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Student" asp-action="Index">Students</a></li>
+                    <li class="breadcrumb-item active">Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Information</h3>
+                        <div class="card-tools">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="fas fa-pencil-alt me-1"></i> Edit
+                            </a>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">Name</span>
+                                        <span class="info-box-number">@Model.Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">Email</span>
+                                        <span class="info-box-number">@Model.Email</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">Phone Number</span>
+                                        <span class="info-box-number">@Model.PhoneNo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">Age</span>
+                                        <span class="info-box-number">@Model.Age years</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">Semester</span>
+                                        <span class="info-box-number">@Model.Semester</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-muted">CGPA</span>
+                                        <span class="info-box-number">
+                                            <span class="badge bg-@(Model.CGPA >= 3.0 ? "success" : Model.CGPA >= 2.0 ? "warning" : "danger")">
+                                                @Model.CGPA
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.AssignedCourses != null && Model.AssignedCourses.Any())
+                        {
+                            <div class="mt-4">
+                                <h4>Enrolled Courses</h4>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Instructor</th>
+                                            <th>Credit Hours</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var course in Model.AssignedCourses)
+                                        {
+                                            <tr>
+                                                <td>@course.Title</td>
+                                                <td>@course.Instructor</td>
+                                                <td>@course.CreditHours</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> 
+
+

@@ -1,0 +1,18 @@
+﻿@model SMS_Objects.courseBO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Course Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><strong>Title:</strong> @Model.Title</h5>
+        <p class="card-text"><strong>Instructor:</strong> @Model.Instructor</p>
+        <p class="card-text"><strong>Credit Hours:</strong> @Model.CreditHours</p>
+    </div>
+</div>
+
+<br />
+<a asp-action="Index" class="btn btn-secondary">Back to Courses</a>
