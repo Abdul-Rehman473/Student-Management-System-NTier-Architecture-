@@ -98,12 +98,10 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item mt-auto" style="margin-top: auto !important;">
-                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("RoleSelection", "Account")" method="post" id="sidebarLogoutForm">
-                            <button type="submit" class="nav-link text-danger w-100 border-0 bg-transparent d-flex align-items-center" style="cursor: pointer; padding: 0.8rem 1rem;">
-                                <i class="nav-icon bi bi-box-arrow-right"></i>
-                                <p class="m-0 ms-2">Logout</p>
-                            </button>
-                        </form>
+                        <a asp-controller="Account" asp-action="Logout" class="nav-link text-danger">
+                            <i class="nav-icon bi bi-box-arrow-right"></i>
+                            <p>Logout</p>
+                        </a>
                     </li>
                 }
             </ul>

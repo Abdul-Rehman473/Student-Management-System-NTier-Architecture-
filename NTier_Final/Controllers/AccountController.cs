@@ -50,8 +50,18 @@ namespace NTier_Final.Controllers
                 var studentExists = await _studentService.GetStudentByEmail(model.Email);
                 if (studentExists == null)
                 {
-                    ModelState.AddModelError(string.Empty, "You are not eligible to register. Please contact admin.");
-                    return View("StudentAuth", model);
+                    TempData["ActiveTab"] = "register";
+                    ModelState.AddModelError(string.Empty, "You are not eligible to register. Please contact admin to be added as a student first.");
+                    return View("StudentAuth", new LoginViewModel { IsStudent = true });
+                }
+
+                // Check if user already exists in Identity
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    TempData["ActiveTab"] = "register";
+                    ModelState.AddModelError(string.Empty, "An account with this email already exists.");
+                    return View("StudentAuth", new LoginViewModel { IsStudent = true });
                 }
 
                 var user = new ApplicationUser
@@ -69,13 +79,14 @@ namespace NTier_Final.Controllers
                     return RedirectToAction("StudentDashboard", "Student");
                 }
 
+                TempData["ActiveTab"] = "register";
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            return View("StudentAuth", model);
+            return View("StudentAuth", new LoginViewModel { IsStudent = true });
         }
 
         [HttpPost]
@@ -112,23 +123,56 @@ namespace NTier_Final.Controllers
         {
             if (ModelState.IsValid)
             {
+                // First check if the user exists
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid email or password.");
+                    return View(model.IsStudent ? "StudentAuth" : "AdminAuth", model);
+                }
+
+                // Check if student trying to login is in the students table
+                if (model.IsStudent)
+                {
+                    var studentExists = await _studentService.GetStudentByEmail(model.Email);
+                    if (studentExists == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "You are not registered as a student in the system.");
+                        return View("StudentAuth", model);
+                    }
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(model.Email);
-                    if (user != null)
+                    if (await _userManager.IsInRoleAsync(user, "Student"))
                     {
-                        if (await _userManager.IsInRoleAsync(user, "Student"))
+                        if (model.IsStudent)
                         {
                             return RedirectToAction("StudentDashboard", "Student");
                         }
-                        else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        else
+                        {
+                            await _signInManager.SignOutAsync();
+                            ModelState.AddModelError(string.Empty, "Please use student login.");
+                            return View("AdminAuth", model);
+                        }
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        if (!model.IsStudent)
                         {
                             return RedirectToAction("Index", "Home");
                         }
+                        else
+                        {
+                            await _signInManager.SignOutAsync();
+                            ModelState.AddModelError(string.Empty, "Please use admin login.");
+                            return View("StudentAuth", model);
+                        }
                     }
                 }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Invalid email or password.");
             }
 
             return View(model.IsStudent ? "StudentAuth" : "AdminAuth", model);
