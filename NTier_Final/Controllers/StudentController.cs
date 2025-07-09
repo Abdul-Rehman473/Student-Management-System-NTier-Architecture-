@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using NTier_Final.Areas.Identity.Data;
+using SMS_Identity;
 using SMS_BLL;
 using SMS_Objects;
 

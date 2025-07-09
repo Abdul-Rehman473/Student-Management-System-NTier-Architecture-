@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NTier_Final.Areas.Identity.Data;
 using SMS_Objects;
 
-namespace NTier_Final.Areas.Identity.Data;
+namespace SMS_Identity;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -25,4 +24,4 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(s => s.AssignedCourses)
             .HasForeignKey(c => c.StudentId);
     }
-}
+} 

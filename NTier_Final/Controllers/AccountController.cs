@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NTier_Final.Areas.Identity.Data;
+using SMS_Identity;
 using NTier_Final.Models;
 using SMS_BLL;
 using System.Threading.Tasks;

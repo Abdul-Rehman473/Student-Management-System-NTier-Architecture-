@@ -41,7 +41,7 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
+      
         var table = $('#coursesTable').DataTable({
             "paging": true,
             "searching": true,
@@ -53,7 +53,7 @@
             }
         });
 
-        // Initialize delete buttons
+        
         $('.delete-course').on('click', function(e) {
             e.preventDefault();
             var courseId = $(this).data('id');
@@ -66,7 +66,7 @@
                     success: function(response) {
                         if (response.success) {
                             toastr.success('Course deleted successfully!');
-                            // Reload the table
+                          
                             window.location.reload();
                         } else {
                             toastr.error('Error deleting course. Please try again.');

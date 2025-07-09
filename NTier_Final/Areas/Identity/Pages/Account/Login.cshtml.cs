@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using NTier_Final.Areas.Identity.Data;
+using SMS_Identity;
 
 namespace NTier_Final.Areas.Identity.Pages.Account
 {

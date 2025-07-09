@@ -1,14 +1,14 @@
-﻿using SMS_DAL.Data;
-using SMS_Objects;
+﻿using SMS_Objects;
 using Microsoft.EntityFrameworkCore;
+using SMS_Identity;
 
 namespace SMS_DAL
 {
     public class CourseRepository : ICourseRepository
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CourseRepository(AppDbContext context)
+        public CourseRepository(ApplicationDbContext context)
         {
             _context = context;
         }

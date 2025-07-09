@@ -21,7 +21,6 @@
     <ProjectReference Include="..\SMS_BLL\SMS_BLL.csproj" />
     <ProjectReference Include="..\SMS_DAL\SMS_DAL.csproj" />
     <ProjectReference Include="..\SMS_Objects\SMS_Objects.csproj" />
-    <ProjectReference Include="..\SMS_View\SMS_View.csproj" />
   </ItemGroup>
 
 </Project>

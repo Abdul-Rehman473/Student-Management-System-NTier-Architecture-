@@ -1,4 +1,9 @@
-﻿<!--begin::Header-->
+﻿@using Microsoft.AspNetCore.Identity
+@using SMS_Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!--begin::Header-->
 <nav class="app-header navbar navbar-expand bg-body">
     <!--begin::Container-->
     <div class="container-fluid">
@@ -14,6 +19,7 @@
             </li>
         </ul>
         <!--end::Start Navbar Links-->
+
         <!--begin::End Navbar Links-->
         <ul class="navbar-nav ms-auto">
             <!--begin::User Menu Dropdown-->

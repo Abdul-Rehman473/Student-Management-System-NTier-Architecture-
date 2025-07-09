@@ -157,18 +157,18 @@ namespace NTier_Final.Controllers
         {
             try 
             {
-                // Get a fresh instance of the course
+               
                 var course = _courseService.GetById(id);
                 if (course != null)
                 {
-                    // Create a new instance to avoid tracking issues
+                   
                     var courseToUpdate = new courseBO
                     {
                         Id = course.Id,
                         Title = course.Title,
                         Instructor = course.Instructor,
                         CreditHours = course.CreditHours,
-                        StudentId = null // Remove the assignment
+                        StudentId = null 
                     };
                     
                     _courseService.Update(courseToUpdate);

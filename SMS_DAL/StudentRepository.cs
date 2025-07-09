@@ -1,17 +1,17 @@
-﻿using SMS_DAL.Data;
-using SMS_Objects;
+﻿using SMS_Objects;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using SMS_Identity;
 
 namespace SMS_DAL
 {
     public class StudentRepository : IStudentRepository
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public StudentRepository(AppDbContext context)
+        public StudentRepository(ApplicationDbContext context)
         {
             _context = context;
         }

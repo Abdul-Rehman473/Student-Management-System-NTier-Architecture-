@@ -65,17 +65,17 @@ namespace SMS_BLL
 
         public void Update(courseBO course)
         {
-            // Get existing course to ensure we're not tracking multiple instances
+            
             var existingCourse = _repository.GetById(course.Id);
             if (existingCourse != null)
             {
-                // Update properties
+               
                 existingCourse.Title = course.Title;
                 existingCourse.Instructor = course.Instructor;
                 existingCourse.CreditHours = course.CreditHours;
                 existingCourse.StudentId = course.StudentId;
                 
-                // Save changes
+               
                 _repository.Update(existingCourse);
             }
         }
@@ -123,3 +123,6 @@ namespace SMS_BLL
         }
     }
 }
+
+
+

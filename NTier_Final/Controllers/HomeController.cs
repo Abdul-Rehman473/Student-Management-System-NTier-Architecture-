@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SMS_BLL;
+using SMS_Identity;
 
 namespace NTier_Final.Controllers
 {
@@ -16,11 +17,9 @@ namespace NTier_Final.Controllers
 
         public IActionResult Index()
         {
-            
             ViewBag.TotalStudents = _studentService.GetAllStudents().Count();
             ViewBag.TotalCourses = _courseService.GetAll().Count();
 
-           
             var recentActivities = new[]
             {
                 new { Description = "System initialized", Date = DateTime.Now }
