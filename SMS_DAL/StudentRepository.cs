@@ -18,12 +18,12 @@ namespace SMS_DAL
 
         public IEnumerable<studentBO> GetAll()
         {
-            return _context.Students.ToList();
+            return _context.Students.Include(s => s.AssignedCourses).ToList();
         }
 
         public studentBO GetById(int id)
         {
-            return _context.Students.Find(id);
+            return _context.Students.Include(s => s.AssignedCourses).FirstOrDefault(s => s.Id == id);
         }
 
         public void Add(studentBO student)
@@ -50,7 +50,9 @@ namespace SMS_DAL
 
         public async Task<studentBO> GetByEmail(string email)
         {
-            return await _context.Students.FirstOrDefaultAsync(s => s.Email == email);
+            return await _context.Students
+                .Include(s => s.AssignedCourses)
+                .FirstOrDefaultAsync(s => s.Email == email);
         }
     }
 }
