@@ -33,7 +33,7 @@ namespace NTier_Final.Controllers
 
         public IActionResult StudentAuth()
         {
-            return View();
+            return View(new LoginViewModel { IsStudent = true });
         }
 
         public IActionResult AdminAuth()
@@ -50,18 +50,20 @@ namespace NTier_Final.Controllers
                 var studentExists = await _studentService.GetStudentByEmail(model.Email);
                 if (studentExists == null)
                 {
-                    TempData["ActiveTab"] = "register";
-                    ModelState.AddModelError(string.Empty, "You are not eligible to register. Please contact admin to be added as a student first.");
-                    return View("StudentAuth", new LoginViewModel { IsStudent = true });
+                    ModelState.AddModelError("", "You are not eligible to register. Please contact admin to be added as a student first.");
+                    var viewModel = new LoginViewModel { IsStudent = true };
+                    ViewBag.ActiveTab = "register";
+                    return View("StudentAuth", viewModel);
                 }
 
                 // Check if user already exists in Identity
                 var existingUser = await _userManager.FindByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
-                    TempData["ActiveTab"] = "register";
-                    ModelState.AddModelError(string.Empty, "An account with this email already exists.");
-                    return View("StudentAuth", new LoginViewModel { IsStudent = true });
+                    ModelState.AddModelError("", "An account with this email already exists.");
+                    var viewModel = new LoginViewModel { IsStudent = true };
+                    ViewBag.ActiveTab = "register";
+                    return View("StudentAuth", viewModel);
                 }
 
                 var user = new ApplicationUser
@@ -79,13 +81,13 @@ namespace NTier_Final.Controllers
                     return RedirectToAction("StudentDashboard", "Student");
                 }
 
-                TempData["ActiveTab"] = "register";
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
 
+            ViewBag.ActiveTab = "register";
             return View("StudentAuth", new LoginViewModel { IsStudent = true });
         }
 
@@ -111,7 +113,7 @@ namespace NTier_Final.Controllers
 
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
 
@@ -127,8 +129,8 @@ namespace NTier_Final.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid email or password.");
-                    return View(model.IsStudent ? "StudentAuth" : "AdminAuth", model);
+                    ModelState.AddModelError("", "Invalid email or password.");
+                    return View("StudentAuth", model);
                 }
 
                 // Check if student trying to login is in the students table
@@ -137,7 +139,7 @@ namespace NTier_Final.Controllers
                     var studentExists = await _studentService.GetStudentByEmail(model.Email);
                     if (studentExists == null)
                     {
-                        ModelState.AddModelError(string.Empty, "You are not registered as a student in the system.");
+                        ModelState.AddModelError("", "You are not registered as a student in the system.");
                         return View("StudentAuth", model);
                     }
                 }
@@ -154,7 +156,7 @@ namespace NTier_Final.Controllers
                         else
                         {
                             await _signInManager.SignOutAsync();
-                            ModelState.AddModelError(string.Empty, "Please use student login.");
+                            ModelState.AddModelError("", "Please use student login.");
                             return View("AdminAuth", model);
                         }
                     }
@@ -167,12 +169,12 @@ namespace NTier_Final.Controllers
                         else
                         {
                             await _signInManager.SignOutAsync();
-                            ModelState.AddModelError(string.Empty, "Please use admin login.");
+                            ModelState.AddModelError("", "Please use admin login.");
                             return View("StudentAuth", model);
                         }
                     }
                 }
-                ModelState.AddModelError(string.Empty, "Invalid email or password.");
+                ModelState.AddModelError("", "Invalid email or password.");
             }
 
             return View(model.IsStudent ? "StudentAuth" : "AdminAuth", model);
@@ -183,27 +185,5 @@ namespace NTier_Final.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("RoleSelection");
         }
-    }
-
-    public class StudentRegisterViewModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-    }
-
-    public class AdminRegisterViewModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-    }
-
-    public class LoginViewModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool RememberMe { get; set; }
-        public bool IsStudent { get; set; }
     }
 } 

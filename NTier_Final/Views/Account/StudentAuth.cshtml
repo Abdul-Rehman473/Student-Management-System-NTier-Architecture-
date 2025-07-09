@@ -11,18 +11,19 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login">Login</a>
+                            <a class="nav-link @(ViewBag.ActiveTab != "register" ? "active" : "")" id="login-tab" data-toggle="tab" href="#login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="register-tab" data-toggle="tab" href="#register">Register</a>
+                            <a class="nav-link @(ViewBag.ActiveTab == "register" ? "active" : "")" id="register-tab" data-toggle="tab" href="#register">Register</a>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="login">
-                            <div asp-validation-summary="All" class="text-danger"></div>
+                        <!-- Login Form -->
+                        <div class="tab-pane fade @(ViewBag.ActiveTab != "register" ? "show active" : "")" id="login">
                             <form asp-action="Login" asp-controller="Account" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IsStudent" value="true" />
                                 <div class="form-group">
                                     <label asp-for="Email">Email</label>
@@ -43,9 +44,11 @@
                                 <button type="submit" class="btn btn-primary mt-3">Login</button>
                             </form>
                         </div>
-                        <div class="tab-pane fade" id="register">
-                            <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <!-- Register Form -->
+                        <div class="tab-pane fade @(ViewBag.ActiveTab == "register" ? "show active" : "")" id="register">
                             <form asp-action="StudentRegister" asp-controller="Account" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
                                     <label for="Email">Email</label>
                                     <input name="Email" type="email" class="form-control" required />
@@ -71,15 +74,11 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // Handle tab switching
             $('.nav-tabs a').click(function (e) {
                 e.preventDefault();
                 $(this).tab('show');
             });
-
-            // Show the correct tab based on validation errors
-            if (window.location.hash === '#register' || '@TempData["ActiveTab"]' === 'register') {
-                $('#register-tab').tab('show');
-            }
         });
     </script>
 } 

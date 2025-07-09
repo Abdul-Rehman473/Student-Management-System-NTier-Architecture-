@@ -12,6 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
+
     public virtual DbSet<studentBO> Students { get; set; }
     public virtual DbSet<courseBO> Courses { get; set; }
 
